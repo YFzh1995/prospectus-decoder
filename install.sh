@@ -9,6 +9,32 @@ set -e
 SKILL_NAME="prospectus-decoder"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
+# === 更新模式 ===
+if [ "$1" = "--update" ]; then
+    SKILL_DIR=""
+    for dir in \
+        "$HOME/.config/opencode/skills/${SKILL_NAME}" \
+        "$HOME/.codex/skills/${SKILL_NAME}" \
+        "$HOME/.claude/skills/${SKILL_NAME}" \
+        "$HOME/.cursor/skills/${SKILL_NAME}"; do
+        if [ -d "${dir}/.git" ]; then
+            SKILL_DIR="${dir}"
+            break
+        fi
+    done
+    if [ -n "$SKILL_DIR" ]; then
+        echo "🔄 正在更新 prospectus-decoder..."
+        cd "$SKILL_DIR" && git pull
+        echo "✅ 已更新至 v$(cat VERSION)"
+        echo "⚠️  请重启 opencode 后生效。"
+        exit 0
+    fi
+    echo "❌ 未找到 prospectus-decoder 安装目录或非 git 仓库"
+    echo "   请先运行完整安装："
+    echo "   curl -fsSL https://raw.githubusercontent.com/YFzh1995/prospectus-decoder/main/install.sh | bash"
+    exit 1
+fi
+
 # === 检测平台 ===
 detect_platform() {
     if [ -d "$HOME/.config/opencode/skills" ]; then
