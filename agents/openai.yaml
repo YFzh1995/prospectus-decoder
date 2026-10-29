@@ -1,0 +1,4 @@
+interface:
+  display_name: "观星哥·拆公司"
+  short_description: "输入公司名，拆解收入、成本与竞争，生成有数据、有比较、有来源的商业模式报告"
+  default_prompt: "使用 $gxg-company-decoder 分析这家公司，先核对主体并让我选择分析深度。"

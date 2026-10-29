@@ -1,107 +1,13 @@
-#!/bin/bash
-# Prospectus Decoder — 一键安装脚本
-# 支持平台：opencode / codex / claude-code / cursor / 通用
-# 作者：观星哥 | 微信：guanxingge2025
-# 仓库：https://github.com/YFzh1995/prospectus-decoder
-
+#!/usr/bin/env bash
+# 观星哥·拆公司：完整本地发布包的便捷入口。
 set -e
-
-SKILL_NAME="prospectus-decoder"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-
-# === 更新模式 ===
-if [ "$1" = "--update" ]; then
-    SKILL_DIR=""
-    for dir in \
-        "$HOME/.config/opencode/skills/${SKILL_NAME}" \
-        "$HOME/.codex/skills/${SKILL_NAME}" \
-        "$HOME/.claude/skills/${SKILL_NAME}" \
-        "$HOME/.cursor/skills/${SKILL_NAME}"; do
-        if [ -d "${dir}/.git" ]; then
-            SKILL_DIR="${dir}"
-            break
-        fi
-    done
-    if [ -n "$SKILL_DIR" ]; then
-        echo "🔄 正在更新 prospectus-decoder..."
-        cd "$SKILL_DIR" && git pull
-        echo "✅ 已更新至 v$(cat VERSION)"
-        echo "⚠️  请重启 opencode 后生效。"
-        exit 0
-    fi
-    echo "❌ 未找到 prospectus-decoder 安装目录或非 git 仓库"
-    echo "   请先运行完整安装："
-    echo "   curl -fsSL https://raw.githubusercontent.com/YFzh1995/prospectus-decoder/main/install.sh | bash"
-    exit 1
+if [ ! -f "${SCRIPT_DIR}/scripts/install_skill.py" ]; then
+  echo '请解压完整发布包后执行；单独下载或管道运行本文件不能安装配套资源。' >&2
+  exit 1
 fi
-
-# === 检测平台 ===
-detect_platform() {
-    if [ -d "$HOME/.config/opencode/skills" ]; then
-        echo "opencode"
-    elif [ -d "$HOME/.codex/skills" ]; then
-        echo "codex"
-    elif [ -d "$HOME/.claude/skills" ]; then
-        echo "claude-code"
-    elif [ -d "$HOME/.cursor/skills" ]; then
-        echo "cursor"
-    else
-        echo "generic"
-    fi
-}
-
-PLATFORM=$(detect_platform)
-
-case "$PLATFORM" in
-    opencode)
-        TARGET_DIR="$HOME/.config/opencode/skills/${SKILL_NAME}"
-        ;;
-    codex)
-        TARGET_DIR="$HOME/.codex/skills/${SKILL_NAME}"
-        ;;
-    claude-code)
-        TARGET_DIR="$HOME/.claude/skills/${SKILL_NAME}"
-        ;;
-    cursor)
-        TARGET_DIR="$HOME/.cursor/skills/${SKILL_NAME}"
-        ;;
-    *)
-        TARGET_DIR="$HOME/.prospectus-decoder"
-        echo "⚠️  未检测到已知平台，安装到通用目录：${TARGET_DIR}"
-        echo "   如需手动注册，请将目录路径加入平台 skills 配置。"
-        ;;
-esac
-
-echo "📦 Prospectus Decoder v$(cat "${SCRIPT_DIR}/VERSION")"
-echo "📍 安装目标：${TARGET_DIR}"
-echo "🖥️  检测平台：${PLATFORM}"
-
-# === 安装文件 ===
-mkdir -p "${TARGET_DIR}"
-
-# 复制核心文件
-cp -r "${SCRIPT_DIR}/SKILL.md" "${TARGET_DIR}/"
-cp -r "${SCRIPT_DIR}/VERSION" "${TARGET_DIR}/"
-cp -r "${SCRIPT_DIR}/prompts" "${TARGET_DIR}/" 2>/dev/null || true
-cp -r "${SCRIPT_DIR}/templates" "${TARGET_DIR}/" 2>/dev/null || true
-cp -r "${SCRIPT_DIR}/outputs" "${TARGET_DIR}/" 2>/dev/null || true
-cp -r "${SCRIPT_DIR}/install.sh" "${TARGET_DIR}/" 2>/dev/null || true
-
-echo ""
-echo "✅ 安装完成！"
-echo ""
-echo "使用方法："
-echo "  @prospectus-decoder /path/to/prospectus.pdf"
-echo "  @prospectus-decoder /path/to/prospectus.pdf --level 2"
-echo "  @prospectus-decoder --version  # 查看版本"
-echo ""
-echo "📖 更多帮助：输入 @prospectus-decoder --help"
-
-# === 降级安装提示 ===
-if [ "$PLATFORM" = "generic" ]; then
-    echo ""
-    echo "⚠️  降级安装（通用目录）注意事项："
-    echo "  - Skill 未自动注册到任何 AI 平台"
-    echo "  - 请手动将 ${TARGET_DIR} 添加到平台的 skills 路径配置"
-    echo "  - 或使用绝对路径引用：@${TARGET_DIR}/SKILL.md /path/to/prospectus.pdf"
+if command -v python3 >/dev/null 2>&1; then
+  exec python3 "${SCRIPT_DIR}/scripts/install_skill.py" "$@"
 fi
+echo '需要Python 3。Windows可使用 py -3 scripts/install_skill.py；WorkBuddy首选上传专用ZIP包。' >&2
+exit 1
