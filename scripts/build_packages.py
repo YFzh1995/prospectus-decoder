@@ -37,6 +37,7 @@ def build(out):
                 rel=f.relative_to(ROOT)
                 if out.resolve() in f.resolve().parents:continue
                 if not f.is_file() or any(x in {'.git','__pycache__','outputs','.DS_Store'} for x in rel.parts) or f.suffix=='.pyc':continue
+                if rel.parts[0]=='platforms':continue
                 if rel.parts[0]=='agents' and platform!='codex':continue
                 if platform=='skillhub' and str(rel)=='.gitignore':continue
                 data=workbuddy_document(original,version).encode() if platform in ('workbuddy','skillhub') and str(rel)=='SKILL.md' else f.read_bytes()

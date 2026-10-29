@@ -1,0 +1,71 @@
+{
+  "name": "gxg-company-expert",
+  "version": "2.2.1",
+  "description": "Understand companies through official filings, business models and financial evidence.",
+  "author": {
+    "name": "观星哥"
+  },
+  "agents": [
+    "./agents/gxg-company-expert.md"
+  ],
+  "skills": [
+    "./skills/gxg-company-decoder"
+  ],
+  "expertType": "agent",
+  "agentName": "gxg-company-expert",
+  "displayName": {
+    "zh": "观星哥",
+    "en": "GuanXingGe"
+  },
+  "profession": {
+    "zh": "拆公司｜商业模式分析师",
+    "en": "Company and Business Model Analyst"
+  },
+  "displayDescription": {
+    "zh": "从招股书和年报看懂公司怎么赚钱，拆解收入、成本、现金和竞争，用数据讲清背后的商业逻辑。",
+    "en": "Understand how companies make money using official filings, financial evidence and competitor comparisons."
+  },
+  "avatar": "avatars/expert.png",
+  "categoryId": "08-FinanceInvestment",
+  "defaultInitPrompt": {
+    "zh": "帮我分析泡泡玛特，它靠什么赚钱？",
+    "en": "How does Pop Mart make money?"
+  },
+  "plugin": "gxg-company-expert",
+  "tags": [
+    {
+      "zh": "商业模式",
+      "en": "Business Models"
+    },
+    {
+      "zh": "招股书解读",
+      "en": "IPO Filings"
+    },
+    {
+      "zh": "同行对比",
+      "en": "Peer Comparison"
+    }
+  ],
+  "quickPrompts": [
+    {
+      "zh": "帮我分析泡泡玛特，它靠什么赚钱？",
+      "en": "How does Pop Mart make money?"
+    },
+    {
+      "zh": "拆解小米的收入、成本和现金流。",
+      "en": "Analyze Xiaomi revenue, costs and cash flow."
+    },
+    {
+      "zh": "分析 Iambic，比较同行和竞争对手。",
+      "en": "Analyze Iambic and compare its competitors."
+    }
+  ],
+  "homepage": "https://github.com/YFzh1995/prospectus-decoder",
+  "keywords": [
+    "招股书",
+    "拆公司",
+    "商业模式",
+    "财报",
+    "公司分析"
+  ]
+}
